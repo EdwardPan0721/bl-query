@@ -47,20 +47,26 @@
       const url = `https://script.google.com/macros/s/AKfycbzajr-3e-vSTnoOPnkLUw_-7pS-UEQXt6nSNsRTM3OSaMYwBbtXCCqLOB4jy_VDlMax/exec?blNumber=${encodeURIComponent(blInput)}&containerNo=${encodeURIComponent(containerInput)}`;
       const response = await fetch(url);
       const result = await response.json();
-
-      console.log(result)
       
       if (result.error) {
         alert(result.error);
         document.getElementById("result").style.display = "none";
       } else {
-        const found = result[0]; // 假設返回的是一個符合條件的資料（最多一條）
-
+        const found = result[0];
         const eday = Number(String(found.emptyDay).trim()) || 0;
         const eextraday = Number(String(found.emptyExtraDay).trim()) || 0;
 
+        let statusText = "";
+
+        if (found.status === "電放") {
+          statusText = "已電放";
+        } else if (found.status === "正本") {
+          statusText = "正本放行";
+        } else {
+          statusText = "未電放";
+        }
         document.getElementById("bl").textContent = found.blNumber;
-        document.getElementById("status").textContent = found.status;
+        document.getElementById("status").textContent = statusText;
         document.getElementById("sumFee").textContent = Number(found.fee).toLocaleString();
         document.getElementById("dueDate").textContent = formatDate(found.due);
         document.getElementById("emptyDays").textContent = eday + eextraday;
