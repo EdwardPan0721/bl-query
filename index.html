@@ -54,7 +54,7 @@
         if (bl.trim() === blInput) {
           const containers = containerStr.split('/').map(c => c.trim());
           if (containers.includes(containerInput)) {
-            found = { bl, status, sum, due, eday, eextraday };
+            found = { bl, status, sum, due, containerStr, eday, eextraday };
             break;
           }
         }
