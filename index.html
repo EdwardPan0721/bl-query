@@ -47,29 +47,23 @@
       const response = await fetch("https://script.google.com/macros/s/AKfycbzajr-3e-vSTnoOPnkLUw_-7pS-UEQXt6nSNsRTM3OSaMYwBbtXCCqLOB4jy_VDlMax/exec");
       const data = await response.json();
 
-      let found = null;
-
-      for (let i = 0; i < data.length; i++) {
-        const [bl, sum, due, status, containerStr, eday, eextraday] = data[i];
-        if (bl.trim() === blInput) {
-          const containers = containerStr.split('/').map(c => c.trim());
-          if (containers.includes(containerInput)) {
-            found = { bl, status, sum, due, containerStr, eday, eextraday };
-            break;
-          }
-        }
+      if (result.error) {
+        alert(result.error);
+        document.getElementById("result").style.display = "none";
+        return;
       }
-
-      if (found) {
-        const eday = Number(String(found.eday).trim()) || 0;
-        const eextraday = Number(String(found.eextraday).trim()) || 0;
-
-        document.getElementById("bl").textContent = found.bl;
-        document.getElementById("status").textContent = found.status;
-        document.getElementById("sumFee").textContent = `$${Number(found.sum).toLocaleString()}`;
-        document.getElementById("dueDate").textContent = formatDate(found.due);
-        document.getElementById("emptyDays").textContent = eday + eextraday;
-        document.getElementById("result").style.display = "block";
+      
+      const found = result[0]; // 你可能只會收到一筆
+      
+      const eday = Number(found.emptyDay) || 0;
+      const eextraday = Number(found.emptyExtraDay) || 0;
+      
+      document.getElementById("bl").textContent = found.blNumber;
+      document.getElementById("status").textContent = found.status;
+      document.getElementById("sumFee").textContent = `$${Number(found.fee).toLocaleString()}`;
+      document.getElementById("dueDate").textContent = found.due;
+      document.getElementById("emptyDays").textContent = eday + eextraday;
+      document.getElementById("result").style.display = "block";
       } else {
         alert("查無符合資料，請確認輸入正確。");
         document.getElementById("result").style.display = "none";
