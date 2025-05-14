@@ -62,11 +62,13 @@
         }
 
         if (found) {
+          const eday = Number(String(found.eday).trim()) || 0;
+          const eextraday = Number(String(found.eextraday).trim()) || 0;
           document.getElementById("bl").textContent = found.bl;
           document.getElementById("status").textContent = found.status;
           document.getElementById("sumFee").textContent = `$${Number(found.sum).toLocaleString()}`;
           document.getElementById("dueDate").textContent = formatDate(found.due);
-          document.getElementById("emptyDays").textContent = Number(found.eday) + Number(found.eextraday);
+          document.getElementById("emptyDays").textContent = eday + eextraday;
           document.getElementById("result").style.display = "block";
         } else {
           alert("查無符合資料，請確認輸入正確。");
