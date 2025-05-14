@@ -57,7 +57,7 @@
         const eextraday = Number(String(found.emptyExtraDay).trim()) || 0;
         document.getElementById("bl").textContent = found.blNumber;
         document.getElementById("status").textContent = found.status;
-        document.getElementById("sumFee").textContent = Number(found.fee).toLocaleString();
+        document.getElementById("sumFee").textContent = `$${Number(found.fee).toLocaleString()}`;
         document.getElementById("dueDate").textContent = formatDate(found.due);
         document.getElementById("emptyDays").textContent = eday + eextraday;
         document.getElementById("result").style.display = "block";
