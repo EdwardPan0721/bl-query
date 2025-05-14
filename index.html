@@ -51,11 +51,11 @@
 
         for (let i = 0; i < data.length; i++) {
           const [bl, sum, due, status, containerStr, eday, eextraday] = data[i];
-          console.log(data[i]);
 
           if (bl.trim() === blInput) {
             const containers = containerStr.split('/').map(c => c.trim());
             if (containers.includes(containerInput)) {
+              console.log(data[i]);
               found = { bl, status, sum, due, eday, eextraday };
               break;
             }
@@ -65,7 +65,7 @@
         if (found) {
           const eday = Number(String(found.eday).trim()) || 0;
           const eextraday = Number(String(found.eextraday).trim()) || 0;
-          console.log("eday:", found.eday, "eextraday:", found.eextraday);
+
           document.getElementById("bl").textContent = found.bl;
           document.getElementById("status").textContent = found.status;
           document.getElementById("sumFee").textContent = `$${Number(found.sum).toLocaleString()}`;
