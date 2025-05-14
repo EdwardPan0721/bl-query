@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>大同通運股份有限公司-電放狀態查詢=</title>
+  <title>大同通運股份有限公司-電放狀態查詢</title>
   <style>
     body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
     label { display: block; margin-top: 12px; }
@@ -32,7 +32,7 @@
       <div><strong>場內免租到期日：</strong><span id="dueDate"></span></div>
       <div><strong>場外免租日：</strong><span id="emptyDays"></span><strong>個日曆天</strong></div>
   </div>
-  
+
 <script>
   window.search = async function () {
     const blInput = document.getElementById("blNo").value.trim();
@@ -44,36 +44,29 @@
     }
 
     try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbzajr-3e-vSTnoOPnkLUw_-7pS-UEQXt6nSNsRTM3OSaMYwBbtXCCqLOB4jy_VDlMax/exec");
-      const data = await response.json();
+      const response = await fetch("https://script.google.com/macros/s/AKfycbzajr-3e-vSTnoOPnkLUw_-7pS-UEQXt6nSNsRTM3OSaMYwBbtXCCqLOB4jy_VDlMax/exec", {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ blNumber: blInput, containerNo: containerInput })
+      });
 
-      let found = null;
+      const result = await response.json();
 
-      for (let i = 0; i < data.length; i++) {
-        const [bl, sum, due, status, containerStr, eday, eextraday] = data[i];
-        if (bl.trim() === blInput) {
-          const containers = containerStr.split('/').map(c => c.trim());
-          if (containers.includes(containerInput)) {
-            console.log(data[i])
-            found = { bl, status, sum, due, containerStr, eday, eextraday };
-            break;
-          }
-        }
-      }
+      if (result.error) {
+        alert(result.error);
+        document.getElementById("result").style.display = "none";
+      } else {
+        const found = result[0]; // 假設返回的是一個符合條件的資料（最多一條）
 
-      if (found) {
-        const eday = Number(String(found.eday).trim()) || 0;
-        const eextraday = Number(String(found.eextraday).trim()) || 0;
+        const eday = Number(String(found.emptyDay).trim()) || 0;
+        const eextraday = Number(String(found.emptyExtraDay).trim()) || 0;
 
-        document.getElementById("bl").textContent = found.bl;
+        document.getElementById("bl").textContent = found.blNumber;
         document.getElementById("status").textContent = found.status;
-        document.getElementById("sumFee").textContent = $${Number(found.sum).toLocaleString()};
+        document.getElementById("sumFee").textContent = Number(found.fee).toLocaleString();
         document.getElementById("dueDate").textContent = formatDate(found.due);
         document.getElementById("emptyDays").textContent = eday + eextraday;
         document.getElementById("result").style.display = "block";
-      } else {
-        alert("查無符合資料，請確認輸入正確。");
-        document.getElementById("result").style.display = "none";
       }
 
     } catch (err) {
@@ -87,6 +80,9 @@
     const year = d.getFullYear();
     const month = ("0" + (d.getMonth() + 1)).slice(-2);
     const day = ("0" + d.getDate()).slice(-2);
-    return ${year}-${month}-${day};
+    return `${year}-${month}-${day}`;
   }
 </script>
+
+</body>
+</html>
