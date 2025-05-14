@@ -55,18 +55,8 @@
         const found = result[0];
         const eday = Number(String(found.emptyDay).trim()) || 0;
         const eextraday = Number(String(found.emptyExtraDay).trim()) || 0;
-
-        let statusText = "";
-
-        if (found.status === "電放") {
-          statusText = "已電放";
-        } else if (found.status === "正本") {
-          statusText = "正本放行";
-        } else {
-          statusText = "未電放";
-        }
         document.getElementById("bl").textContent = found.blNumber;
-        document.getElementById("status").textContent = statusText;
+        document.getElementById("status").textContent = found.status;
         document.getElementById("sumFee").textContent = Number(found.fee).toLocaleString();
         document.getElementById("dueDate").textContent = formatDate(found.due);
         document.getElementById("emptyDays").textContent = eday + eextraday;
