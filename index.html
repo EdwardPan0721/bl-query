@@ -52,7 +52,7 @@
         alert(result.error);
         document.getElementById("result").style.display = "none";
       } else {
-        const found = result[0];
+        const found = result;
         const eday = Number(String(found.場外日).trim()) || 0;
         const eextraday = Number(String(found.場外額外日).trim()) || 0;
         document.getElementById("bl").textContent = found.提單號碼;
