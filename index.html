@@ -52,13 +52,12 @@
         alert(result.error);
         document.getElementById("result").style.display = "none";
       } else {
-        const found = result;
-        const eday = Number(String(found.場外日).trim()) || 0;
-        const eextraday = Number(String(found.場外額外日).trim()) || 0;
-        document.getElementById("bl").textContent = found.提單號碼;
-        document.getElementById("status").textContent = found.電放狀態;
-        document.getElementById("sumFee").textContent = `$${Number(found.含稅總計).toLocaleString()}`;
-        document.getElementById("dueDate").textContent = formatDate(found.場內到期日);
+        const eday = Number(String(result.場外日).trim()) || 0;
+        const eextraday = Number(String(result.場外額外日).trim()) || 0;
+        document.getElementById("bl").textContent = result.提單號碼;
+        document.getElementById("status").textContent = result.電放狀態;
+        document.getElementById("sumFee").textContent = `$${Number(result.含稅總計).toLocaleString()}`;
+        document.getElementById("dueDate").textContent = formatDate(result.場內到期日);
         document.getElementById("emptyDays").textContent = eday + eextraday;
         document.getElementById("result").style.display = "block";
       }
