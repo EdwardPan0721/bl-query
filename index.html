@@ -1,3 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>大同通運股份有限公司-電放狀態查詢=</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    label { display: block; margin-top: 12px; }
+    input[type="text"] { width: 100%; padding: 6px; }
+    button { margin-top: 16px; padding: 10px 20px; font-size: 16px; }
+    .result { margin-top: 24px; padding: 16px; border: 1px solid #ccc; border-radius: 8px; }
+    .result div { margin: 6px 0; }
+  </style>
+</head>
+<body>
+
+  <h2>大同通運股份有限公司-電放狀態查詢</h2>
+
+  <label for="blNo">提單號碼</label>
+  <input type="text" id="blNo" placeholder="輸入提單號碼" />
+
+  <label for="containerNo">貨櫃號碼</label>
+  <input type="text" id="containerNo" placeholder="輸入貨櫃號碼" />
+
+  <button onclick="search()">查詢</button>
+
+  <div class="result" id="result" style="display: none;">
+      <h3 style="margin: 0 0 16px 0; border-bottom: 1px solid #aaa; padding-bottom: 4px;">=====查詢結果=====</h3>
+      <div><strong>提單號碼：</strong><span id="bl"></span></div>
+      <div><strong>電放狀態：</strong><span id="status"></span></div>
+      <div><strong>含稅總計：</strong><span id="sumFee"></span></div>
+      <div><strong>場內免租到期日：</strong><span id="dueDate"></span></div>
+      <div><strong>場外免租日：</strong><span id="emptyDays"></span><strong>個日曆天</strong></div>
+  </div>
+  
 <script>
   window.search = async function () {
     const blInput = document.getElementById("blNo").value.trim();
