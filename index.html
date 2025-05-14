@@ -51,10 +51,10 @@
 
       for (let i = 0; i < data.length; i++) {
         const [bl, sum, due, status, containerStr, eday, eextraday] = data[i];
-        console.log(data[i])
         if (bl.trim() === blInput) {
           const containers = containerStr.split('/').map(c => c.trim());
           if (containers.includes(containerInput)) {
+            console.log(data[i])
             found = { bl, status, sum, due, containerStr, eday, eextraday };
             break;
           }
