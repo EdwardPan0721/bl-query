@@ -44,12 +44,8 @@
     }
 
     try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbzajr-3e-vSTnoOPnkLUw_-7pS-UEQXt6nSNsRTM3OSaMYwBbtXCCqLOB4jy_VDlMax/exec", {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ blNumber: blInput, containerNo: containerInput })
-      });
-
+      const url = `https://script.google.com/macros/s/AKfycbzajr-3e-vSTnoOPnkLUw_-7pS-UEQXt6nSNsRTM3OSaMYwBbtXCCqLOB4jy_VDlMax/exec?blNumber=${encodeURIComponent(blInput)}&containerNo=${encodeURIComponent(containerInput)}`;
+      const response = await fetch(url);
       const result = await response.json();
 
       if (result.error) {
