@@ -47,10 +47,9 @@
       const url = `https://script.google.com/macros/s/AKfycbzajr-3e-vSTnoOPnkLUw_-7pS-UEQXt6nSNsRTM3OSaMYwBbtXCCqLOB4jy_VDlMax/exec?blNumber=${encodeURIComponent(blInput)}&containerNo=${encodeURIComponent(containerInput)}`;
       const response = await fetch(url);
       const result = await response.json();
-      
+      document.getElementById("result").style.display = "none";
       if (result.error) {
         alert(result.error);
-        document.getElementById("result").style.display = "none";
       } else {
         const eday = Number(String(result.場外日).trim()) || 0;
         const eextraday = Number(String(result.場外額外日).trim()) || 0;
