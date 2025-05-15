@@ -29,8 +29,9 @@
       <div><strong>提單號碼：</strong><span id="bl"></span></div>
       <div><strong>電放狀態：</strong><span id="status"></span></div>
       <div><strong>含稅總計：</strong><span id="sumFee"></span></div>
-      <div><strong>場內免租到期日：</strong><span id="dueDate"></span></div>
+      <div><strong>場內免租到期日：</strong><span id="fulldate"></span></div>
       <div><strong>場外免租日：</strong><span id="emptyDays"></span><strong>個日曆天(領櫃隔日為第1日)</strong></div>
+      <div><strong>預計發單時間：</strong><span id="issuedate"></span></div>
   </div>
 
 <script>
@@ -61,7 +62,8 @@
         document.getElementById("bl").textContent = result.提單號碼;
         document.getElementById("status").textContent = result.電放狀態;
         document.getElementById("sumFee").textContent = `$${Number(result.含稅總計).toLocaleString()}`;
-        document.getElementById("dueDate").textContent = formatDate(result.場內到期日);
+        document.getElementById("fulldate").textContent = formatDate(result.場內到期日);
+        document.getElementById("issuedate").textContent = result.預計發單時間;
         document.getElementById("emptyDays").textContent = eday + eextraday;
         resultDiv.style.display = "block";
       }
