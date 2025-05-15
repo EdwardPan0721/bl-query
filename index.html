@@ -37,14 +37,21 @@
   window.search = async function () {
     const blInput = document.getElementById("blNo").value.trim();
     const containerInput = document.getElementById("containerNo").value.trim();
-
+  
     if (!blInput || !containerInput) {
       alert("請輸入提單號碼和貨櫃號碼！");
       return;
     }
 
     try {
-      document.getElementById("result").style.display = "none";
+      const button = document.querySelector("button");
+      const resultDiv = document.getElementById("result");
+      const buttonoritext = button.textContent;
+
+      button.textContent = "查詢中..."
+      button.disabled = true;
+      resultDiv.style.display = "none";
+      
       const url = `https://script.google.com/macros/s/AKfycbzajr-3e-vSTnoOPnkLUw_-7pS-UEQXt6nSNsRTM3OSaMYwBbtXCCqLOB4jy_VDlMax/exec?blNumber=${encodeURIComponent(blInput)}&containerNo=${encodeURIComponent(containerInput)}`;
       const response = await fetch(url);
       const result = await response.json();
@@ -58,12 +65,15 @@
         document.getElementById("sumFee").textContent = `$${Number(result.含稅總計).toLocaleString()}`;
         document.getElementById("dueDate").textContent = formatDate(result.場內到期日);
         document.getElementById("emptyDays").textContent = eday + eextraday;
-        document.getElementById("result").style.display = "block";
+        resultDiv.style.display = "block";
       }
-
+      
     } catch (err) {
       alert("查詢失敗，請稍後再試。");
       console.error(err);
+    } finally {
+      button.textContent = buttonoritext;
+      button.disabled = false;
     }
   }
 
