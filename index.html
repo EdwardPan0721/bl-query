@@ -62,9 +62,9 @@
         document.getElementById("bl").textContent = result.提單號碼;
         document.getElementById("status").textContent = result.電放狀態;
         document.getElementById("sumFee").textContent = `$${Number(result.含稅總計).toLocaleString()}`;
-        document.getElementById("fulldate").textContent = formatDate(result.場內到期日);
-        document.getElementById("issuedate").textContent = formatTime(result.預計發單時間);
-        document.getElementById("emptyDays").textContent = eday + eextraday;
+        document.getElementById("fulldate").textContent = result.場內到期日;
+        document.getElementById("issuedate").textContent = result.預計發單時間;
+        document.getElementById("emptyDays").textContent = Number(result.場外日) + Number(result.場外額外日);
         resultDiv.style.display = "block";
       }
       
@@ -75,30 +75,6 @@
       button.textContent = buttonoritext;
       button.disabled = false;
     }
-  }
-
-  function formatDate(date) {
-    const d = new Date(date);
-    if (!date || isNaN(d.getTime())) {
-      return "";
-    }
-    const year = d.getFullYear();
-    const month = ("0" + (d.getMonth() + 1)).slice(-2);
-    const day = ("0" + d.getDate()).slice(-2);
-    return `${year}-${month}-${day}`;
-  }
-  
-  function formatTime(date) {
-    const d = new Date(date);
-    if (!date || isNaN(d.getTime())) {
-      return "";
-    }
-    const year = d.getFullYear();
-    const month = ("0" + (d.getMonth() + 1)).slice(-2);
-    const day = ("0" + d.getDate()).slice(-2);
-    const hour = ("0" + d.getHours()).slice(-2);
-    const min = ("0" + d.getMinutes()).slice(-2);
-    return `${year}-${month}-${day} ${hour}:${min}`;
   }
 </script>
 
