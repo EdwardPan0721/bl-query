@@ -34,6 +34,21 @@
   </div>
 
   <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      ['blNo', 'containerNo', 'vesselName', 'voyage'].forEach(id => {
+        const input = document.getElementById(id);
+        if (!input) return;
+  
+        const saved = localStorage.getItem(id);
+        if (saved) {
+          input.value = saved;
+        }
+  
+        input.addEventListener('input', () => {
+          localStorage.setItem(id, input.value);
+        });
+      });
+    });
     const baseUrl = "https://script.google.com/macros/s/AKfycbzajr-3e-vSTnoOPnkLUw_-7pS-UEQXt6nSNsRTM3OSaMYwBbtXCCqLOB4jy_VDlMax/exec";
     async function queryBL() {
       const bl = document.getElementById("blNo").value.trim();
