@@ -44,12 +44,10 @@
         return;
       }
 
-      const queryUrl = `${baseUrl}?blNumber=${encodeURIComponent(bl)}&containerNo=${encodeURIComponent(container)}`;
-      const btn = document.getElementById("queryBtn");
-      btn.disabled = true;
-      btn.textContent = "查詢中...";  
       try {
+        const queryUrl = `${baseUrl}?blNumber=${encodeURIComponent(bl)}&containerNo=${encodeURIComponent(container)}`; 
         const btn = document.getElementById("queryBtn");
+        document.getElementById("result").style.display = "none";
         btn.disabled = true;
         btn.textContent = "查詢中...";
         const response = await fetch(queryUrl);
