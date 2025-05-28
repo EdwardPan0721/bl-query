@@ -15,10 +15,10 @@
 <body>
   <h2>小提單查詢系統</h2>
 
-  <label>提單號碼：<input type="text" id="blNo"></label>
-  <label>貨櫃號碼：<input type="text" id="containerNo"></label>
-  <label>船名：<input type="text" id="vesselName"></label>
-  <label>航次：<input type="text" id="voyage"></label><br>
+  <label>提單號碼：<input type="text" id="blNo" name="blNumber"></label>
+  <label>貨櫃號碼：<input type="text" id="containerNo" name="containerNo"></label>
+  <label>船名：<input type="text" id="vesselName" name="vesselName"></label>
+  <label>航次：<input type="text" id="voyage"name="voyage"></label><br>
   <button id="queryBtn" onclick="queryBL()">查詢提單資料</button>
   <button id="downloadBtn" onclick="downloadBL()">下載小提單副本</button>
 
