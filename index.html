@@ -84,11 +84,11 @@
         return;
       }
 
-      const downloadUrl = `${baseUrl}?blNumber=${encodeURIComponent(bl)}&containerNo=${encodeURIComponent(container)}&vesselName=${encodeURIComponent(vessel)}&voyage=${encodeURIComponent(voyage)}&download=true`;
-      const btn = document.getElementById("downloadBtn");
-      btn.disabled = true;
-      btn.textContent = "下載中...";
       try {
+        const downloadUrl = `${baseUrl}?blNumber=${encodeURIComponent(bl)}&containerNo=${encodeURIComponent(container)}&vesselName=${encodeURIComponent(vessel)}&voyage=${encodeURIComponent(voyage)}&download=true`;
+        const btn = document.getElementById("downloadBtn");
+        btn.disabled = true;
+        btn.textContent = "下載中...";
         const response = await fetch(downloadUrl);
         const result = await response.json();
 
