@@ -15,11 +15,10 @@
 <body>
   <h2>小提單查詢系統</h2>
 
-  <label>提單號碼：<input type="text" id="blNo"></label><br>
-  <label>貨櫃號碼：<input type="text" id="containerNo"></label><br>
-  <label>船名：<input type="text" id="vesselName"></label><br>
-  <label>航次：<input type="text" id="voyage"></label><br><br>
-
+  <label>提單號碼：<input type="text" id="blNo"></label>
+  <label>貨櫃號碼：<input type="text" id="containerNo"></label>
+  <label>船名：<input type="text" id="vesselName"></label>
+  <label>航次：<input type="text" id="voyage"></label><br>
   <button onclick="queryBL()">查詢提單資料</button>
   <button onclick="downloadBL()">下載小提單副本</button>
 
@@ -36,7 +35,6 @@
 
   <script>
     const baseUrl = "https://script.google.com/macros/s/AKfycbzajr-3e-vSTnoOPnkLUw_-7pS-UEQXt6nSNsRTM3OSaMYwBbtXCCqLOB4jy_VDlMax/exec";
-
     async function queryBL() {
       const bl = document.getElementById("blNo").value.trim();
       const container = document.getElementById("containerNo").value.trim();
@@ -47,7 +45,6 @@
       }
 
       const queryUrl = `${baseUrl}?blNumber=${encodeURIComponent(bl)}&containerNo=${encodeURIComponent(container)}`;
-
       try {
         const response = await fetch(queryUrl);
         const result = await response.json();
@@ -56,7 +53,6 @@
           alert(result.error);
           return;
         }
-
         document.getElementById("result").style.display = "block";
         document.getElementById("bl").textContent = result.提單號碼 || "－";
         document.getElementById("status").textContent = result.電放狀態 || "－";
@@ -82,7 +78,6 @@
       }
 
       const downloadUrl = `${baseUrl}?blNumber=${encodeURIComponent(bl)}&containerNo=${encodeURIComponent(container)}&vesselName=${encodeURIComponent(vessel)}&voyage=${encodeURIComponent(voyage)}&download=true`;
-
       try {
         const response = await fetch(downloadUrl);
         const result = await response.json();
