@@ -19,8 +19,8 @@
   <label>貨櫃號碼：<input type="text" id="containerNo"></label>
   <label>船名：<input type="text" id="vesselName"></label>
   <label>航次：<input type="text" id="voyage"></label><br>
-  <button onclick="queryBL()">查詢提單資料</button>
-  <button onclick="downloadBL()">下載小提單副本</button>
+  <button id="queryBtn" onclick="queryBL()">查詢提單資料</button>
+  <button id="downloadBtn" onclick="downloadBL()">下載小提單副本</button>
 
   <hr>
   <div id="result" style="display: none;">
@@ -45,7 +45,13 @@
       }
 
       const queryUrl = `${baseUrl}?blNumber=${encodeURIComponent(bl)}&containerNo=${encodeURIComponent(container)}`;
+      const btn = document.getElementById("queryBtn");
+      btn.disabled = true;
+      btn.textContent = "查詢中...";  
       try {
+        const btn = document.getElementById("queryBtn");
+        btn.disabled = true;
+        btn.textContent = "查詢中...";
         const response = await fetch(queryUrl);
         const result = await response.json();
 
@@ -63,6 +69,9 @@
       } catch (error) {
         console.error(error);
         alert("查詢失敗，請稍後再試。");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "查詢提單資料";
       }
     }
 
@@ -78,6 +87,9 @@
       }
 
       const downloadUrl = `${baseUrl}?blNumber=${encodeURIComponent(bl)}&containerNo=${encodeURIComponent(container)}&vesselName=${encodeURIComponent(vessel)}&voyage=${encodeURIComponent(voyage)}&download=true`;
+      const btn = document.getElementById("downloadBtn");
+      btn.disabled = true;
+      btn.textContent = "下載中...";
       try {
         const response = await fetch(downloadUrl);
         const result = await response.json();
@@ -90,6 +102,9 @@
       } catch (error) {
         console.error(error);
         alert("下載失敗，請稍後再試。");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "下載小提單副本";
       }
     }
   </script>
