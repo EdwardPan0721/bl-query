@@ -34,6 +34,57 @@
       <div><strong>預計發單時間：</strong><span id="issuedate"></span></div>
   </div>
 
+  <hr />
+
+<h3>下載小提單</h3>
+<button onclick="toggleDownload()">我要下載小提單</button>
+
+<div id="downloadFields" style="display: none;">
+  <label for="vesselName">船名</label>
+  <input type="text" id="vesselName" placeholder="輸入船名" />
+
+  <label for="voyage">航次</label>
+  <input type="text" id="voyage" placeholder="輸入航次" />
+
+  <button onclick="downloadBL()">下載</button>
+</div>
+
+<script>
+  function toggleDownload() {
+    const block = document.getElementById("downloadFields");
+    block.style.display = block.style.display === "none" ? "block" : "none";
+  }
+
+  async function downloadBL() {
+    const bl = document.getElementById("blNo").value.trim();
+    const container = document.getElementById("containerNo").value.trim();
+    const vessel = document.getElementById("vesselName").value.trim();
+    const voyage = document.getElementById("voyage").value.trim();
+
+    if (!bl || !container || !vessel || !voyage) {
+      alert("請輸入完整資料（提單號碼、貨櫃號碼、船名與航次）");
+      return;
+    }
+
+    const url = `https://script.google.com/macros/s/你的SCRIPT_ID/exec?blNumber=${encodeURIComponent(bl)}&containerNo=${encodeURIComponent(container)}&vesselName=${encodeURIComponent(vessel)}&voyage=${encodeURIComponent(voyage)}&download=true`;
+    
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.error) {
+        alert(data.error);
+      } else if (data.downloadUrl) {
+        window.open(data.downloadUrl, "_blank");
+      } else {
+        alert("未找到小提單檔案。");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("下載失敗！");
+    }
+  }
+</script>
+  
 <script>
   window.search = async function () {
     const blInput = document.getElementById("blNo").value.trim();
