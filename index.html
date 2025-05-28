@@ -1,93 +1,94 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <title>電放狀態查詢</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
-    label { display: block; margin-top: 12px; }
-    input[type="text"] { width: 100%; padding: 6px; }
-    button { margin-top: 16px; padding: 10px 20px; font-size: 16px; }
-    .result { margin-top: 24px; padding: 16px; border: 1px solid #ccc; border-radius: 8px; }
-    .result div { margin: 6px 0; }
-  </style>
+  <meta charset="UTF-8">
+  <title>小提單查詢與下載</title>
 </head>
 <body>
+  <h2>小提單查詢系統</h2>
 
-  <h2>電放狀態查詢</h2>
+  <label>提單號碼：<input type="text" id="blNo"></label><br>
+  <label>貨櫃號碼：<input type="text" id="containerNo"></label><br>
+  <label>船名：<input type="text" id="vesselName"></label><br>
+  <label>航次：<input type="text" id="voyage"></label><br><br>
 
-  <label for="blNo">提單號碼</label>
-  <input type="text" id="blNo" placeholder="輸入提單號碼" />
+  <button onclick="queryBL()">查詢</button>
+  <button onclick="downloadBL()">下載 PDF</button>
 
-  <label for="containerNo">貨櫃號碼</label>
-  <input type="text" id="containerNo" placeholder="輸入貨櫃號碼" />
-
-  <label for="vesselName">船名</label>
-  <input type="text" id="vesselName" placeholder="輸入船名" />
-
-  <label for="voyage">航次</label>
-  <input type="text" id="voyage" placeholder="輸入航次" />
-
-  <button onclick="downloadBL()">查詢並下載小提單</button>
-
-  <div class="result" id="result" style="display: none;">
-      <h3 style="margin: 0 0 16px 0; border-bottom: 1px solid #aaa; padding-bottom: 4px;">=====查詢結果=====</h3>
-      <div><strong>提單號碼：</strong><span id="bl"></span></div>
-      <div><strong>電放狀態：</strong><span id="status"></span></div>
-      <div><strong>含稅總計：</strong><span id="sumFee"></span></div>
-      <div><strong>場內免租到期日：</strong><span id="fulldate"></span></div>
-      <div><strong>場外免租日：</strong><span id="emptyDays"></span><strong>個日曆天(領櫃隔日為第1日)</strong></div>
-      <div><strong>預計發單時間：</strong><span id="issuedate"></span></div>
+  <hr>
+  <div id="result" style="display: none;">
+    <h3>=====查詢結果=====</h3>
+    <p>提單號碼：<span id="bl">－</span></p>
+    <p>電放狀態：<span id="status">－</span></p>
+    <p>含稅總計：<span id="sumFee">－</span></p>
+    <p>場內免租到期日：<span id="fulldate">－</span></p>
+    <p>場外免租日：<span id="emptyDays">0</span>個日曆天(領櫃隔日為第1日)</p>
+    <p>預計發單時間：<span id="issuedate">－</span></p>
   </div>
 
-<script>
-async function downloadBL() {
-  const bl = document.getElementById("blNo").value.trim();
-  const container = document.getElementById("containerNo").value.trim();
-  const vessel = document.getElementById("vesselName").value.trim();
-  const voyage = document.getElementById("voyage").value.trim();
+  <script>
+    const baseUrl = "https://script.google.com/macros/s/AKfycbzajr-3e-vSTnoOPnkLUw_-7pS-UEQXt6nSNsRTM3OSaMYwBbtXCCqLOB4jy_VDlMax/exec";
 
-  if (!bl || !container || !vessel || !voyage) {
-    alert("請輸入完整資料（提單號碼、貨櫃號碼、船名與航次）");
-    return;
-  }
+    async function queryBL() {
+      const bl = document.getElementById("blNo").value.trim();
+      const container = document.getElementById("containerNo").value.trim();
 
-  const queryUrl = `https://script.google.com/macros/s/AKfycbzajr-3e-vSTnoOPnkLUw_-7pS-UEQXt6nSNsRTM3OSaMYwBbtXCCqLOB4jy_VDlMax/exec?blNumber=${encodeURIComponent(bl)}&containerNo=${encodeURIComponent(container)}&vesselName=${encodeURIComponent(vessel)}&voyage=${encodeURIComponent(voyage)}&download=true`;
+      if (!bl || !container) {
+        alert("請輸入提單號碼與貨櫃號碼");
+        return;
+      }
 
-  try {
-    const response = await fetch(queryUrl);
-    const data = await response.json();
+      const queryUrl = `${baseUrl}?blNumber=${encodeURIComponent(bl)}&containerNo=${encodeURIComponent(container)}`;
 
-    if (data.error) {
-      alert(data.error);
-    } else {
-      // 顯示結果
-      document.getElementById("bl").textContent = bl;
-      document.getElementById("status").textContent = data.電放狀態 || '－';
-      document.getElementById("sumFee").textContent = data.含稅總計 ? `$${Number(data.含稅總計).toLocaleString()}` : '－';
-      document.getElementById("fulldate").textContent = data.場內到期日 || '－';
-      document.getElementById("emptyDays").textContent = Number(data.場外日 || 0) + Number(data.場外額外日 || 0);
-      document.getElementById("issuedate").textContent = data.預計發單時間 || '－';
-      document.getElementById("result").style.display = "block";
+      try {
+        const response = await fetch(queryUrl);
+        const result = await response.json();
 
-      // 自動下載 PDF（透過 downloadUrl）
-      if (data.downloadUrl) {
-        const a = document.createElement('a');
-        a.href = data.downloadUrl;
-        a.download = `${bl}.pdf`; // 設定下載檔名
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      } else {
-        alert("未找到小提單檔案。");
+        if (result.error) {
+          alert(result.error);
+          return;
+        }
+
+        document.getElementById("result").style.display = "block";
+        document.getElementById("bl").textContent = result.提單號碼 || "－";
+        document.getElementById("status").textContent = result.電放狀態 || "－";
+        document.getElementById("sumFee").textContent = result.含稅總計 >= 0 ? `$${Number(result.含稅總計).toLocaleString()}` : "－";
+        document.getElementById("fulldate").textContent = result.場內到期日 || "－";
+        document.getElementById("emptyDays").textContent = Number(result.場外日 || 0) + Number(result.場外額外日 || 0);
+        document.getElementById("issuedate").textContent = result.預計發單時間 || "－";
+      } catch (error) {
+        console.error(error);
+        alert("查詢失敗，請稍後再試");
       }
     }
-  } catch (err) {
-    console.error(err);
-    alert("查詢或下載失敗，請稍後再試！");
-  }
-}
-</script>
 
+    async function downloadBL() {
+      const bl = document.getElementById("blNo").value.trim();
+      const container = document.getElementById("containerNo").value.trim();
+      const vessel = document.getElementById("vesselName").value.trim();
+      const voyage = document.getElementById("voyage").value.trim();
+
+      if (!bl || !container || !vessel || !voyage) {
+        alert("請輸入完整資料（提單號碼、貨櫃號碼、船名與航次）");
+        return;
+      }
+
+      const downloadUrl = `${baseUrl}?blNumber=${encodeURIComponent(bl)}&containerNo=${encodeURIComponent(container)}&vesselName=${encodeURIComponent(vessel)}&voyage=${encodeURIComponent(voyage)}&download=true`;
+
+      try {
+        const response = await fetch(downloadUrl);
+        const result = await response.json();
+
+        if (result.downloadUrl) {
+          window.open(result.downloadUrl, "_blank");
+        } else {
+          alert("找不到對應的 PDF 小提單");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("下載失敗，請稍後再試");
+      }
+    }
+  </script>
 </body>
 </html>
